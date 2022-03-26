@@ -5,7 +5,7 @@ async function fetchData() {
   const response = await fetch("https://restcountries.com/v3.1/all");
   const countries_data = await response.json();
   console.log(countries_data);
-  countries_count.textContent = countries_data.length;
+
   // sort data according to population
   let countries_sort_popu = [...countries_data];
   countries_sort_popu = countries_sort_popu.sort(
@@ -69,7 +69,19 @@ async function fetchData() {
     })
     .join("\n");
 
-  //make default show
+  //make default data show
+  countries_count.classList.remove(
+    "skeleton",
+    "skeleton-text",
+    "skeleton-text-short"
+  );
+  description.classList.remove(
+    "skeleton",
+    "skeleton-text",
+    "skeleton-text-short"
+  );
+  countries_count.textContent = `Currently we have ${countries_data.length} countries.`;
+  description.textContent = "10 most populated countries in the world";
   data.innerHTML = population_text;
 
   // make click button work
@@ -94,6 +106,12 @@ async function fetchData() {
 }
 
 fetchData().catch((err) => console.log(err));
+
+//adding skeleton loading effect
+let template = document.querySelector(".template");
+for (let i = 0; i < 10; i++) {
+  data.append(template.content.cloneNode(true));
+}
 
 // showing data in browser
 function showData(name, value, percent = value) {
